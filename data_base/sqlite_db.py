@@ -1,3 +1,21 @@
+import sqlite3
+
+# =========================================== Создаем БД ===============================================
+
+
+def sql_start():
+    base = sqlite3.connect('users_who_have_downloaded_music.db')
+
+    if base:
+        print('Data base connected OK!')
+    else:
+        raise Exception('Ошибка подключения к базе данных')
+
+    cur = base.cursor()
+
+    cur.execute("CREATE TABLE IF NOT EXISTS users_download_music (users_name TEXT, music_name TEXT, download_date TEXT)")
+    base.commit()
+    base.close()
 
 
 
@@ -12,52 +30,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# import sqlite3 as sq
-#
 #
 # # ================= ФУНКЦИЯ КОТОРАЯ БЕРЕТ ИЗ БАЗЫ ДАННЫХ ВСЕ ЗАРЕГИСТРИРОВАННЫЕ USER_ID =============================
 # def sql_is_user_id_in_user_ids(user_id):
