@@ -4,9 +4,12 @@ config_tg/config.py
 # это системная папка для IDE
 .idea/
 venv/
+# тестовые модули
+test_import.py
+test_download.py
 
-# мы не хотим загружать на сервер Логи
-
-
-
+# мы не хотим загружать на сервер Логи и БД
+debug.log
+logs.log
+users_who_have_downloaded_music.db
 
