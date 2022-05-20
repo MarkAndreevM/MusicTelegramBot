@@ -9,7 +9,7 @@ import os, sys
 
 # Импортируем модуль datetime (определяем переменные для записи в БД)
 import datetime
-from data_base.sqlite_db import sql_start
+from data_base.sqlite_db import sql_start, sql_insert
 
 # import logging
 # logging.basicConfig(
@@ -29,6 +29,7 @@ from music.music_script_download import download  # импортируем фу�
 
 
 async def send_to_myself(dp):
+    sql_start()
     await bot.send_message(chat_id=admin_id, text='Бот запущен')
     print('Бот вышел в чат')
 
@@ -99,7 +100,7 @@ def insert_music_data_in_db(query, song):
     music_name = song['title']
     download_date = datetime.datetime.today()
 
-    sql_start(users_name, music_name, download_date)
+    sql_insert(users_name, music_name, download_date)
 
 
 #  функция возвращает данные песни (имя, время, ссылку и тд...), которую выбрал пользователь
