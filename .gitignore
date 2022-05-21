@@ -13,3 +13,5 @@ debug.log
 logs.log
 users_who_have_downloaded_music.db
 
+downloads_music/
+
