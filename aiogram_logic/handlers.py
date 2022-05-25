@@ -1,8 +1,10 @@
-from create_bot import bot, dp
-from aiogram import types, Dispatcher
-from youtubesearchpython import VideosSearch, VideoDurationFilter, CustomSearch
-from aiogram_logic.client import the_path_to_the_song
+from aiogram import types
+from aiogram_logic.functional_process import get_audio_file_by_query
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+from youtubesearchpython import VideosSearch
+
+from create_bot import bot, dp
 from music.music_script_download import len_time  # говнофункция (временная), чтобы треки были длинной до 10 минут
 
 
@@ -21,27 +23,26 @@ async def user_song_request(message: types.Message):
     song_title = message.text  # определяем переменную и записываем в неё название песни, которую прислал пользователь
     song_title = '+'.join(song_title.split())  # если название песни состоит из 2 и более слов
     # метод VideosSearch достаёт всю информацию о limit=количестве видео (по запросу-названию)
-    videosSearch_on_song_title = VideosSearch(song_title, limit=10)
+    search_result = VideosSearch(song_title, limit=10)
 
     # вытаскиваем время песни, название, и ID, чтобы собрать клавиатуру (limit = ?)
-    songs = list(map(lambda x: [x['duration'] + '|' + ' ' + x['title'], x['id']],
-                     videosSearch_on_song_title.resultComponents))
+    songs = (f"{i['duration']} | {i['title']} ~ {i['id']}" for i in search_result.resultComponents if i['duration'])
 
     # ============================= ИНОЛАЙНКЛАВИАТУРА ДЛЯ ТРЕКОВ В ТЕЛЕГРАМ ========================================
 
     keyboard = InlineKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 
-    #  компонуем клавиатуру используя цикл for, где i[0] это duration и title, i[1] - ID выбранной песни
+    # компонуем клавиатуру используя цикл for, где i[0] это duration и title, i[1] - ID выбранной песни
     for i in songs:
-        if len_time(i[0]) > 3:
-            pass
-        else:
+        i = i.split('~')
+        if len_time(i[0]) <= 3:
             keyboard.row(InlineKeyboardButton(i[0], callback_data=i[1]))
     await message.answer('Выберите название трека', reply_markup=keyboard)
 
 
-#  отлавливаем нажатие пользователя на инлайнкнопку --> возвращается ID трека
 @dp.callback_query_handler()
-async def callback_func(query):
-    file_audio_send = await the_path_to_the_song(query)
-    await bot.send_audio(query.from_user.id, file_audio_send)
+async def send_audio_by_query(query):
+    # Функция отвечает пользователю на запрос --> отправляет выбранную композицию (в аргументе - значение callback_data)
+    audio_file = await get_audio_file_by_query(query)
+    await query.bot.send_audio(query.from_user.id, audio_file)
+

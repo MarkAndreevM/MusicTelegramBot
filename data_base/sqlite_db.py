@@ -1,26 +1,23 @@
-import sqlite3
+import sqlite3 as sq
 
-# =========================================== Создаем БД ===============================================
+# =========================================== БД ===============================================
 
-database_path = 'users_who_have_downloaded_music.db'
+database_path = 'database.db'
 
 
 def sql_start():
-    connection = sqlite3.connect(database_path)
 
-    cur = connection.cursor()
+    with sq.connect(database_path) as connection:
+        cur = connection.cursor()
+        cur.execute("CREATE TABLE IF NOT EXISTS users_download_music ("
+                    "users_id INT, "
+                    "music_name TEXT, "
+                    "download_date TEXT "
+                    ")")
 
-    cur.execute("CREATE TABLE IF NOT EXISTS users_download_music (users_name TEXT, music_name TEXT, download_date TEXT)")
-    connection.commit()
-    connection.close()
 
+def sql_insert(users_id, music_name, download_date):
 
-def sql_insert(users_name, music_name, download_date):
-    connection = sqlite3.connect(database_path)
-
-    cur = connection.cursor()
-
-    cur.execute("INSERT INTO users_download_music VALUES (?,?,?)", (users_name, str(music_name), str(download_date)))
-    connection.commit()
-    connection.close()
-
+    with sq.connect(database_path) as connection:
+        cur = connection.cursor()
+        cur.execute("INSERT INTO users_download_music VALUES (?,?,?)", (users_id, str(music_name), str(download_date)))
