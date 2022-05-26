@@ -26,15 +26,32 @@ def download(song: str):
 
 # string_numeric = '3:51| KREC - Нежность'
 
-# todo: написать функцию, которая подсчитывает секунды в трек
-# Функция подсчитывает количество цифр в продолжительности трека (string_numeric: строка с продолжительностью трека)
-def len_time(string_numeric: str) -> int:
 
+# Функция подсчитывает количество секунд в треке (string_numeric: строка с продолжительностью трека)
+def long_time(string_numeric):
     index_music = string_numeric.find('|')
-    len_num = 0
-    for i in string_numeric[:index_music]:
-        if i.isnumeric():
-            len_num += 1
-    return len_num
+    string_time = string_numeric[:index_music]
+
+    if string_time.count(':') <= 1:
+        ftr = [60, 1]
+        return sum([a * b for a, b in zip(ftr, map(int, string_time.split(':')))])
+    else:
+        ftr = [3600, 60, 1]
+        return sum([a * b for a, b in zip(ftr, map(int, string_time.split(':')))])
+
+
+# # OLD Функция подсчитывает кол-во цифр в продолжительности трека (string_numeric: строка с продолжительностью трека)
+# def len_time(string_numeric: str) -> int:
+#
+#     index_music = string_numeric.find('|')
+#     len_num = 0
+#     for i in string_numeric[:index_music]:
+#         if i.isnumeric():
+#             len_num += 1
+#     return len_num
+
+
+
+
 
 

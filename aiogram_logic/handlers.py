@@ -3,9 +3,9 @@ from aiogram_logic.functional_process import get_audio_file_by_query
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from youtubesearchpython import VideosSearch
+from music.music_script_download import long_time
 
 from create_bot import bot, dp
-from music.music_script_download import len_time  # говнофункция (временная), чтобы треки были длинной до 10 минут
 
 
 # ======================== Отлавливаем команду(сообщение = start) --> отвечаем приветствием =====================
@@ -31,11 +31,10 @@ async def user_song_request(message: types.Message):
     # ============================= ИНОЛАЙНКЛАВИАТУРА ДЛЯ ТРЕКОВ В ТЕЛЕГРАМ ========================================
 
     keyboard = InlineKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-
     # компонуем клавиатуру используя цикл for, где i[0] это duration и title, i[1] - ID выбранной песни
     for i in songs:
         i = i.split('~')
-        if len_time(i[0]) <= 3:
+        if long_time(i[0]) <= 420:
             keyboard.row(InlineKeyboardButton(i[0], callback_data=i[1]))
     await message.answer('Выберите название трека', reply_markup=keyboard)
 
