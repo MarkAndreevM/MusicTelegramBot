@@ -28,13 +28,13 @@ async def user_song_request(message: types.Message):
     # вытаскиваем время песни, название, и ID, чтобы собрать клавиатуру (limit = ?)
     songs = (f"{i['duration']} | {i['title']} ~ {i['id']}" for i in search_result.resultComponents if i['duration'])
 
-    # ============================= ИНОЛАЙНКЛАВИАТУРА ДЛЯ ТРЕКОВ В ТЕЛЕГРАМ ========================================
+    # ============================= ИНЛАЙНКЛАВИАТУРА ДЛЯ ТРЕКОВ В ТЕЛЕГРАМ ========================================
 
     keyboard = InlineKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
     # компонуем клавиатуру используя цикл for, где i[0] это duration и title, i[1] - ID выбранной песни
     for i in songs:
         i = i.split('~')
-        if long_time(i[0]) <= 420:
+        if long_time(i[0]) <= 1800:
             keyboard.row(InlineKeyboardButton(i[0], callback_data=i[1]))
     await message.answer('Выберите название трека', reply_markup=keyboard)
 

@@ -6,16 +6,10 @@ fpath = f"downloads_music/%(title)s   %(id)s.%(ext)s"
 
 # Параметры, которые передаем в init при создании экземпляра класса
 music_options = {
-
     'format': 'bestaudio/best',
     "outtmpl": fpath,
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '310',
-
-    }],
 }
+
 
 # Функция для скачивания и преобразования в Mp3 формат (song: ссылка на видео в Youtube)
 def download(song: str):
@@ -25,8 +19,6 @@ def download(song: str):
 
 
 # string_numeric = '3:51| KREC - Нежность'
-
-
 # Функция подсчитывает количество секунд в треке (string_numeric: строка с продолжительностью трека)
 def long_time(string_numeric):
     index_music = string_numeric.find('|')
