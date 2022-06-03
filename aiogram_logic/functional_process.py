@@ -3,7 +3,6 @@ import logging
 import os
 
 import aiogram
-from youtubesearchpython import VideosSearch
 
 from config_tg.config import admin_id
 from music.music_script_download import download
@@ -25,7 +24,7 @@ async def send_to_myself(dp):
     print('Бот вышел в чат')
 
 
-# Определяем функцию, которая ищет/скачивает композицию и возвращает нам имя скаченного/найденного файла.
+# Определяем функцию, которая ищет(по ID)/скачивает композицию и возвращает нам имя скаченного/найденного файла.
 async def get_filename_song(query):
 
     # создаем список, если id песни есть в папке (downloads_music) или пустой список - если такого id нет
@@ -41,7 +40,7 @@ async def get_filename_song(query):
     return filename
 
 
-#  функция, которая берет имя пользователя, название песни и дату когда пользователь запросил песню, и записывает в БД
+#  функция, которая берет имя пользователя, ID песни и дату когда пользователь запросил песню, и записывает в БД
 def insert_music_data_in_db(query):
     users_id = query.from_user.id
     music_name = query.data
