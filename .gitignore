@@ -13,7 +13,3 @@ venv/
 log.log
 database.db
 data.csv
-
-# папка куда загружается скаченная музыка
-downloads_music/
-
