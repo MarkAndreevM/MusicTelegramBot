@@ -1,6 +1,6 @@
 import datetime
-import logging
 import os
+import csv
 
 import aiogram
 
@@ -8,9 +8,8 @@ from config_tg.config import admin_id
 from music.music_script_download import download
 from data_base.sqlite_db import sql_start, sql_insert
 
-import csv
-# ======================== Проверка работоспособности (проверка токена) =========================================
 
+# ======================== Проверка работоспособности (проверка токена) =========================================
 
 async def send_to_myself(dp):
     sql_start()
@@ -31,7 +30,7 @@ async def get_filename_song(query):
     filename_find = [i for i in os.listdir('downloads_music') if query.data in i]
     if not filename_find:
         await query.answer('Прошу немного подождать, идёт загрузка трека')
-        # функция, при помощи которой мы скачиваем видео из YouTube и переводим в Mp3 формат
+        # функция, при помощи которой мы скачиваем видео из YouTube и переводим в m4a формат
         download(query.data.strip())
 
         filename_find = [i for i in os.listdir('downloads_music') if query.data in i]
@@ -40,7 +39,7 @@ async def get_filename_song(query):
     return filename
 
 
-#  функция, которая берет имя пользователя, ID песни и дату когда пользователь запросил песню, и записывает в БД
+#  Функция, принимает callback_data (ID песни). Записывает в БД, id пользователя, id песни, дату запроса
 def insert_music_data_in_db(query):
     users_id = query.from_user.id
     music_name = query.data
@@ -56,11 +55,10 @@ def insert_music_data_in_db(query):
 
 #  получаем путь к запрошенной аудиозаписи перед отправкой пользователю
 async def get_audio_file_by_query(query):
-    filename = await get_filename_song(query)  # определяем переменную filename
+    filename = await get_filename_song(query)
     insert_music_data_in_db(query)
 
-    # открытие файла типа open(), и InputFile запихивает указатель на этот файл (указываем путь к файлу)
+    # открытие файла ( аналог open() ), и InputFile запихивает указатель на этот файл (указываем путь к файлу)
     audio_file = aiogram.types.input_file.InputFile(f'./downloads_music/{filename}')
 
-    logging.info(f'SEND_AUDIO {query.from_user.id}, {audio_file}', exc_info=1)
     return audio_file

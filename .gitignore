@@ -1,13 +1,13 @@
+# это системная папка для IDE
+.idea/
+venv/
+
 # Хранит приватные данные (ключи, ID и тп)
 config_tg/config.py
 
 # тестовые модули
 test_import.py
 test_download.py
-
-# это системная папка для IDE
-.idea/
-venv/
 
 # мы не хотим загружать на сервер Логи, БД, csv-файл
 log.log

@@ -13,7 +13,8 @@ def sql_start():
                     "users_id INT, "
                     "music_name TEXT, "
                     "download_date TEXT "
-                    ")")
+                    ")"
+        )
 
 
 def sql_insert(users_id, music_name, download_date):
