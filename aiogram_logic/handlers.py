@@ -53,7 +53,7 @@ async def user_song_request(message: types.Message):
         count = 0
         keyboard = InlineKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 
-        number_songs_page = ceil(len(new_songs_list) / 5)  # количество страниц в клавиатуре (в одной странице до 5 песен)
+        number_songs_page = ceil(len(new_songs_list) / 5)  # кол-во страниц в клавиатуре (в одной странице до 5 песен)
 
         for i in new_songs_list[count*5:(count+1)*5]:
             keyboard.row(InlineKeyboardButton(i[0], callback_data=i[1]))

@@ -6,8 +6,9 @@ fpath = f"downloads_music/%(title)s   %(id)s.%(ext)s"
 
 # Параметры, которые передаем в init при создании экземпляра класса
 music_options = {
-    'format': 'bestaudio/best',
+    'format': 'bestaudio[ext=m4a]/best[ext=m4a]/best',
     "outtmpl": fpath,
+
 }
 
 
@@ -32,15 +33,6 @@ def long_time(string_numeric):
         return sum([a * b for a, b in zip(ftr, map(int, string_time.split(':')))])
 
 
-# # OLD Функция подсчитывает кол-во цифр в продолжительности трека (string_numeric: строка с продолжительностью трека)
-# def len_time(string_numeric: str) -> int:
-#
-#     index_music = string_numeric.find('|')
-#     len_num = 0
-#     for i in string_numeric[:index_music]:
-#         if i.isnumeric():
-#             len_num += 1
-#     return len_num
 
 
 
