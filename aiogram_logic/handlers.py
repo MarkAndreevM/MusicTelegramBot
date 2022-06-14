@@ -5,18 +5,20 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from youtubesearchpython import VideosSearch
 from music.music_script_download import long_time
 
-from create_bot import bot, dp
-
 from math import ceil
 import json
+
+from create_bot import bot, dp
 
 # ======================== Отлавливаем команду(сообщение = start) --> отвечаем приветствием =====================
 
 
 @dp.message_handler(commands=["start"])
 async def start_command(message: types.Message):
-    await message.answer("Привет, я музыкальный бот!\n"
-                         "Чтобы найти аудиозапись, отправь мне название песни и исполнителя!")
+    await message.answer(
+        "Привет, я музыкальный бот!\n"
+        "Чтобы найти аудиозапись, отправь мне название песни и исполнителя!"
+    )
 
 
 # =========== Обрабатываем запрос (сообщение пользователя) НАЗВАНИЕ ПЕСНИ / ИСПОЛНИТЕЛЯ ========================
@@ -28,7 +30,6 @@ GLOBAL_DICT_LIST_MUSIC_ON_REQUEST = {}
 
 @dp.message_handler()
 async def user_song_request(message: types.Message):
-    global GLOBAL_DICT_LIST_MUSIC_ON_REQUEST
 
     song_title = '+'.join(message.text.split())  # если название песни состоит из 2 и более слов
     # метод VideosSearch достаёт всю информацию о limit=количестве видео (по запросу-названию)
@@ -36,7 +37,6 @@ async def user_song_request(message: types.Message):
     # вытаскиваем время песни, название, и ID, чтобы собрать клавиатуру (limit = ?)
     songs = [(f"{i['duration']} | {i['title']} ", f" {i['id']}") for i in search_result.resultComponents if i['duration']]
 
-    # ============================= ИНЛАЙНКЛАВИАТУРА ДЛЯ ТРЕКОВ В ТЕЛЕГРАМ ========================================
     new_songs_list = []
     # пересоздаем список с допустимой продолжительностью треков
     for i in songs:
@@ -46,6 +46,9 @@ async def user_song_request(message: types.Message):
     if len(new_songs_list) == 0:
         await message.answer('По данному запросу ничего не нашлось. Попробуйте ещё раз!')
     else:
+        # ============================= ИНЛАЙНКЛАВИАТУРА ДЛЯ ТРЕКОВ В ТЕЛЕГРАМ ========================================
+
+        global GLOBAL_DICT_LIST_MUSIC_ON_REQUEST
         # Записываю в словарь новый ключ и значение
         GLOBAL_DICT_LIST_MUSIC_ON_REQUEST[message.from_user.id] = new_songs_list
 
@@ -69,22 +72,23 @@ async def user_song_request(message: types.Message):
 async def send_audio_by_query(query):
 
     global GLOBAL_DICT_LIST_MUSIC_ON_REQUEST
-
     new_songs_list = GLOBAL_DICT_LIST_MUSIC_ON_REQUEST[query.from_user.id]
 
     if '>' in query.data:  # Запрос со стрелочкой > содержит номер страницы. Пример '>,3'
         count = int(query.data.split(',')[1])
         if count != ceil(len(new_songs_list) / 5):
-            await query.message.edit_text(f"{query.data.split(',')[2]}",
-                                          reply_markup=forward_backward_keyboard(new_songs_list=new_songs_list, count=count,
-                                                                     query=query))
+            await query.message.edit_text(
+                f"{query.data.split(',')[2]}",
+                reply_markup=forward_backward_keyboard(new_songs_list=new_songs_list, count=count, query=query)
+            )
 
     elif '<' in query.data:
         count = int(query.data.split(',')[1])
         if count != -1:
-            await query.message.edit_text(f"{query.data.split(',')[2]}",
-                                          reply_markup=forward_backward_keyboard(new_songs_list=new_songs_list, count=count,
-                                                                     query=query))
+            await query.message.edit_text(
+                f"{query.data.split(',')[2]}",
+                reply_markup=forward_backward_keyboard(new_songs_list=new_songs_list, count=count, query=query)
+            )
 
     elif '=' not in query.data:
         audio_file = await get_audio_file_by_query(query)

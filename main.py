@@ -20,11 +20,10 @@ def music_download_makedir():
         os.mkdir(name_path_music_downloads)
 
 
-music_download_makedir()
-
 # ========================================= Запуск Бота ===========================================
 
 
 if __name__ == "__main__":
     from aiogram_logic.functional_process import send_to_myself
+    music_download_makedir()
     executor.start_polling(dp, on_startup=send_to_myself)

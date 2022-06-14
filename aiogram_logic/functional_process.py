@@ -8,8 +8,8 @@ from config_tg.config import admin_id
 from music.music_script_download import download
 from data_base.sqlite_db import sql_start, sql_insert
 
-
 # ======================== Проверка работоспособности (проверка токена) =========================================
+
 
 async def send_to_myself(dp):
     sql_start()
